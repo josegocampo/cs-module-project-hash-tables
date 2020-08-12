@@ -26,7 +26,7 @@ class HashTable:
         self.capacity = [None] * capacity
         self.count = count
         
-
+        
     def get_num_slots(self):
         """
         Return the length of the list you're using to hold the hash
@@ -83,35 +83,25 @@ class HashTable:
     
         index = self.hash_index(key)
         array = self.capacity
-        ll = array[index]
         node = HashTableEntry(key,value)
-        
-        print('YYYY', ll)
-        if ll is None:
-            print('here')
+    
+        if array[index] is None:
             self.count += 1
-            array.insert(index, node)
-            # ll.head = node
-            return
+            array[index] = node
             
-        if self.get(key) is False:
-            ('then here')
-            self.count += 1
-            curhead = ll.head
-            ll.head = HashTableEntry(key,value)
-            ll.head.next = curhead
-        
         else:
-            node = ll.head
-            while node.key != key:
-                node = node.next
-            if node.key == key:
-                node.value = value
-            
-
-        
-
-
+            if self.get(key) is False:
+                self.count += 1
+                prev_head = array[index]
+                node.next = prev_head
+                array[index] = node
+             
+            else:
+                cur_node = array[index]
+                while cur_node.key != key:
+                    cur_node = cur_node.next
+                if cur_node.key == key:
+                    cur_node.value = value
 
 
     def delete(self, key):
@@ -121,6 +111,18 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        array = self.capacity
+        node = array[index]
+        
+        if self.get is False:
+            return "Nothing to delete"
+        
+        if array[index].key == key:
+            if array[index].next is None:
+                array[index] = None
+            while array[index].key != key:
+                print('f')
 
 
     def get(self, key):
@@ -130,25 +132,24 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        ll = self.capacity[index]
-        print('LLL', ll)
-        if ll is not None:
-            print('wtf')
-            node = ll.head
-            while node.key != key:
-                if node.next is None:
+        array = self.capacity
+
+        if array[index] is not None:
+            cur_node = array[index]
+            if cur_node.key == key:
+                return cur_node.value
+                
+            while cur_node.key != key:
+                if cur_node.next is None:
                     return False
+
                 else:
-                    node = node.next
+                    cur_node = cur_node.next
                     
-            if node.key == key:
-                return node.value
+            
         else:
             return False
 
-       
-
-        
 
     def resize(self, new_capacity):
         """
@@ -158,28 +159,27 @@ class HashTable:
         """
         # Your code here
 
-    def printcount(self):
-        print(self.count)
+ 
 
 if __name__ == "__main__":
     ht = HashTable(8)
-    print(ht.capacity)
+
+    ht.put("line_1", "'Twas brillig, and the slithy toves")
     ht.put("line_2", "Did gyre and gimble in the wabe:")
-    print('blibli',ht.capacity[0].next)
-    ht.put("line_2", "All mimsy were the borogoves,")
-    print('blibli',ht.capacity[0].next.value)
-    # ht.put("line_4", "And the mome raths outgrabe.")
-    # ht.put("line_5", '"Beware the Jabberwock, my son!')
-    # ht.put("line_6", "The jaws that bite, the claws that catch!")
-    # ht.put("line_7", "Beware the Jubjub bird, and shun")
-    # ht.put("line_8", 'The frumious Bandersnatch!"')
-    # ht.put("line_9", "He took his vorpal sword in hand;")
-    # ht.put("line_10", "Long time the manxome foe he sought--")
-    # ht.put("line_11", "So rested he by the Tumtum tree")
-    # ht.put("line_12", "And stood awhile in thought.")
+    ht.put("line_3", "All mimsy were the borogoves,")
+    ht.put("line_4", "And the mome raths outgrabe.")
+    ht.put("line_5", '"Beware the Jabberwock, my son!')
+    ht.put("line_6", "The jaws that bite, the claws that catch!")
+    ht.put("line_7", "Beware the Jubjub bird, and shun")
+    ht.put("line_8", 'The frumious Bandersnatch!"')
+    ht.put("line_9", "He took his vorpal sword in hand;")
+    ht.put("line_10", "Long time the manxome foe he sought--")
+    ht.put("line_11", "So rested he by the Tumtum tree")
+    ht.put("line_12", "And stood awhile in thought.")
 
     # print("")
-
+    print('test', ht.capacity[7].next.key)
+    print(ht.get_load_factor())
     # # Test storing beyond capacity
     # for i in range(1, 13):
     #     print(ht.get(f"line_{i}"))
